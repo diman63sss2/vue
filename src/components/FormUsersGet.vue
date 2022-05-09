@@ -3,7 +3,7 @@
     <h2>GetUsers</h2>
     <input type="button" value="Отправить запрос" @click="mounted" />
     <div>
-      <h3>Пользователи:</h3>
+      <h3>Пользователи::</h3>
       <div v-for="value in users" :key="value.users">
         <p>id: {{ value.userId }}</p>
         <p>email: {{ value.email }}</p>
