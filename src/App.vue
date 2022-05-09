@@ -1,26 +1,53 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Check-Pos />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import CheckPos from "./components/CheckPos";
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    CheckPos,
+  },
+  data() {
+    return {};
+  },
+};
 </script>
 
 <style>
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dn {
+  display: none !important;
+}
+
+a {
+  text-decoration: none;
+}
+
+.container {
+  width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 90%;
 }
 </style>
