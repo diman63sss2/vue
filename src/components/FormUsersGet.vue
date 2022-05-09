@@ -5,7 +5,7 @@
     <div>
       <h3>Пользователи:</h3>
       <div v-for="value in users" :key="value.users">
-        <p>id: {{ value.id }}</p>
+        <p>id: {{ value.userId }}</p>
         <p>email: {{ value.email }}</p>
         <p>username: {{ value.username }}</p>
         <p>password: {{ value.password }}</p>
