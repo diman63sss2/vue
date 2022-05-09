@@ -1,6 +1,6 @@
 <template>
   <form action="">
-    <h2>DellUser</h2>
+    <h2>DellSlUser</h2>
     <input type="number" v-model="userNumber" />
     <input type="button" value="Отправить запрос" @click="mounted" />
     <div>
