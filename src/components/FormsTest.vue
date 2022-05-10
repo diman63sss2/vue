@@ -1,17 +1,22 @@
 <template>
+  <Form-user-update />
   <Form-users-get />
   <Form-user-get />
   <Form-user-dell />
   <Form-user-reg />
   <Form-user-sign />
+  <Form-article-add />
 </template>
 
 <script>
-import FormUsersGet from "./FormUsersGet";
-import FormUserGet from "./FormUserGet";
-import FormUserReg from "./FormUserReg";
-import FormUserDell from "./FormUserDell";
-import FormUserSign from "./FormUserSign";
+import FormArticleAdd from "./forms/FormArticleAdd";
+import FormUserUpdate from "./forms/FormUserUpdate";
+import FormUsersGet from "./forms/FormUsersGet";
+import FormUserGet from "./forms/FormUserGet";
+import FormUserReg from "./forms/FormUserReg";
+import FormUserDell from "./forms/FormUserDell";
+import FormUserSign from "./forms/FormUserSign";
+
 export default {
   components: {
     FormUsersGet,
@@ -19,8 +24,9 @@ export default {
     FormUserReg,
     FormUserDell,
     FormUserSign,
+    FormArticleAdd,
+    FormUserUpdate,
   },
-  setup() {},
 };
 </script>
 
