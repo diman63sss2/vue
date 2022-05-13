@@ -70,7 +70,7 @@ export default {
             email: this.user.email,
             username: this.user.username,
             password: this.user.password,
-            files: this.user.files,
+            file: this.user.files,
           })
           .then((response) => {
             this.result = response.status;
