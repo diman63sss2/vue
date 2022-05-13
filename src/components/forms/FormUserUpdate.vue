@@ -39,9 +39,9 @@ export default {
     return {
       result: null,
       user: {
-        email: "",
-        username: "",
-        password: "",
+        email: "dimatest4@mail.ru",
+        username: "dimatest4",
+        password: "test",
         files: null,
       },
       userId: null,
@@ -49,18 +49,17 @@ export default {
       errorMessage: "",
       status: null,
       sucsess: "",
+      testfiles: null,
     };
   },
   created() {},
   methods: {
     async mounted() {
-      if (this.user.files != null) {
-        let formData = new FormData();
-        for (var i = 0; i < this.user.files.length; i++) {
-          let file = this.files[i];
-          formData.append("files[" + i + "]", file);
-        }
-      }
+      let formData = new FormData();
+      formData.append("username", this.user.username);
+      formData.append("password", this.user.password);
+      formData.append("email", this.user.email);
+      formData.append("file", this.user.files);
       if (
         this.user.email == "" ||
         this.user.username == "" ||
@@ -68,46 +67,22 @@ export default {
       ) {
         this.sucsess = "Заполните все поля";
       } else {
-        if (this.user.files != null) {
-          axios
-            .post("http://localhost:8080/user/" + this.userId, {
-              email: this.user.email,
-              username: this.user.username,
-              password: this.user.password,
-              file: this.user.files,
-            })
-            .then((response) => {
-              this.result = response.status;
-              console.log(response);
-              console.log(this.result);
-              this.sucsess = "Данные успешно обновленныы";
-            })
-            .catch((error) => {
-              this.errorMessage = error.message;
-              console.error("There was an error!", error);
-              this.status = error.response.status;
-              this.sucsess = "Произошла ошибка";
-            });
-        } else {
-          axios
-            .post("http://localhost:8080/user/" + this.userId, {
-              email: this.user.email,
-              username: this.user.username,
-              password: this.user.password,
-            })
-            .then((response) => {
-              this.result = response.status;
-              console.log(response);
-              console.log(this.result);
-              this.sucsess = "Данные успешно обновленныы";
-            })
-            .catch((error) => {
-              this.errorMessage = error.message;
-              console.error("There was an error!", error);
-              this.status = error.response.status;
-              this.sucsess = "Произошла ошибка";
-            });
-        }
+        axios
+          .patch("http://localhost:8080/user/" + this.userId, formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+          })
+          .then((response) => {
+            this.result = response.status;
+            console.log(response);
+            console.log(this.result);
+            this.sucsess = "Данные успешно обновленныы";
+          })
+          .catch((error) => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+            this.status = error.response.status;
+            this.sucsess = "Произошла ошибка";
+          });
       }
     },
     handleFileUpload() {
