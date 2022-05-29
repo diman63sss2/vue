@@ -1,15 +1,9 @@
 <template>
-  <form action="">
-    <h2>RegUser</h2>
-    <input type="email" v-model="user.email" placeholder="email" required />
-    <input type="name" v-model="user.username" placeholder="name" required />
-    <input
-      type="password"
-      v-model="user.password"
-      placeholder="пороль"
-      required
-    />
-    <input type="button" value="Отправить запрос" @click="mounted" />
+  <form action="" class="modal__form">
+    <input required type="text" v-model="user.email" class="modal__form__input" placeholder="E-MAIL">
+    <input required type="text" v-model="user.username" class="modal__form__input" placeholder="ВАШЕ ИМЯ">
+    <input required type="password" v-model="user.password" class="modal__form__input" placeholder="ПАРОЛЬ">
+    <input class="modal__form__button" type="button" value="РЕГИСТРАЦИЯ" @click="mounted" />
     <div>
       {{ sucsess }}
       <br />

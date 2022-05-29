@@ -6,29 +6,30 @@
         <span class="catalog__sort"> По популярности </span>
       </div>
       <div class="catalog__items">
-        <a
+        <div
           v-for="value in articles"
           :key="value.id"
-          href="new.html"
           class="catalog__item"
         >
-          <div class="catalog__item__img__container">
-            <img
-              :src="value.filename"
-              :alt="value.title"
-              class="catalog__item__img"
-            />
-          </div>
-          <div class="catalog__item__content">
-            <div class="catalog__item__content__container">
-              <h2 class="catalog__item__title">{{ value.title }}</h2>
-              <p class="catalog__item__desc">
-                {{ value.text }}
-              </p>
+          <a @click="$router.push('/post/${value.id}')">
+            <div class="catalog__item__img__container">
+              <img
+                :src="value.filename"
+                :alt="value.title"
+                class="catalog__item__img"
+              />
             </div>
-            <span class="catalog__item__date"> {{ value.creationDate }} </span>
-          </div>
-        </a>
+            <div class="catalog__item__content">
+              <div class="catalog__item__content__container">
+                <h2 class="catalog__item__title">{{ value.title }}</h2>
+                <p class="catalog__item__desc">
+                  {{ value.text }}
+                </p>
+              </div>
+              <span class="catalog__item__date"> {{ value.creationDate }} </span>
+            </div>
+          </a>
+        </div>
       </div>
       <div class="catalog__pagination">
         <a href="#" class="catalog__pagination__link"> 01 </a>
@@ -61,7 +62,9 @@ export default {
         this.erors.push(e);
       });
   },
-  methods: {},
+  methods: {
+
+  },
 };
 </script>
 

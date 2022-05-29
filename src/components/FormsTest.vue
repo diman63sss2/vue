@@ -4,7 +4,6 @@
   <Form-user-get />
   <Form-user-dell />
   <Form-user-reg />
-  <Form-user-sign />
   <Form-article-add />
 </template>
 
@@ -15,7 +14,6 @@ import FormUsersGet from "./forms/FormUsersGet";
 import FormUserGet from "./forms/FormUserGet";
 import FormUserReg from "./forms/FormUserReg";
 import FormUserDell from "./forms/FormUserDell";
-import FormUserSign from "./forms/FormUserSign";
 
 export default {
   components: {
@@ -23,7 +21,6 @@ export default {
     FormUserGet,
     FormUserReg,
     FormUserDell,
-    FormUserSign,
     FormArticleAdd,
     FormUserUpdate,
   },

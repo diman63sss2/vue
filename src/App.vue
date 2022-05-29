@@ -1,16 +1,20 @@
+
 <template>
-  <Check-Pos />
+  <div>
+    <Header-app />
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-import CheckPos from "./components/CheckPos";
+import HeaderApp from "@/components/HeaderApp";
+//import FormsTest from "@/components/FormsTest";
+//import CatalogItems from "@/components/CatalogItems";
+
 export default {
   components: {
-    CheckPos,
-  },
-  data() {
-    return {};
-  },
+    HeaderApp,
+  }
 };
 </script>
 

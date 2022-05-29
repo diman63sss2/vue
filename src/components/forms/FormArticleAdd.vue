@@ -38,7 +38,7 @@ export default {
         filename:
           "https://static8.depositphotos.com/1008504/984/i/600/depositphotos_9843276-stock-photo-the-word-news.jpg",
         tag: null,
-        authorId: "4",
+        authorId: "1",
       },
       erors: [],
       errorMessage: null,
@@ -52,6 +52,8 @@ export default {
       if (this.article.title == "" || this.article.text == "") {
         this.sucsess = "Заполните все поля";
       } else {
+        let token = localStorage.getItem("token")
+        if(localStorage.access_token) token = localStorage.getItem('access_token');
         axios
           .post("http://localhost:8080/article", {
             title: this.article.title,
@@ -59,6 +61,11 @@ export default {
             filename: this.article.filename,
             tag: this.article.tag,
             authorId: this.article.authorId,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
           })
           .then((response) => {
             this.result = response.status;
