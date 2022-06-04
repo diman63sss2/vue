@@ -6,16 +6,16 @@
           <router-link to="/" class="header__menu__link">Главная</router-link>
         </li>
         <li class="header__menu__item">
-          <a href="add.html" class="header__menu__link"> Добавить новость </a>
+          <router-link to="/post/add" class="header__menu__link">Добавить новость</router-link>
         </li>
       </nav>
       <div v-if="this.autorizen == false" class="header__user__сontainer" @click="modalOpen">
         <span class="header__user modal-authorization-btn"> Войти </span>
       </div>
       <div v-if="this.autorizen == true" class="header__user__сontainer">
-        <a href="home.html" class="header__user modal-authorization-btn">
+        <router-link to="/home" class="header__user modal-authorization-btn">
           {{name}}
-        </a>
+        </router-link>
         <span class="header__user modal-authorization-btn" @click="signOut">
           Выйти
         </span>
@@ -69,6 +69,7 @@ export default {
   padding-top: 20px;
   padding-bottom: 20px;
   background: #d3d3d3;
+  margin-bottom: 40px;
 }
 
 .header .container {

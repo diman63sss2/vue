@@ -11,7 +11,7 @@
           :key="value.id"
           class="catalog__item"
         >
-          <a @click="$router.push('/post/${value.id}')">
+          <a @click="$router.push('/post/' + value.id)">
             <div class="catalog__item__img__container">
               <img
                 :src="value.filename"

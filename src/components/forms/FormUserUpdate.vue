@@ -11,7 +11,7 @@
       required
     />
     <input type="file" id="file" ref="file" v-on:change="handleFileUpload()" />
-    <input type="button" value="Отправить запрос" @click="mounted" />
+    <input type="button" value="Отправить запрос" @click="profile" />
     <div>
       {{ sucsess }}
       <br />
@@ -34,6 +34,7 @@
 <script>
 // axios.get("http://localhost:8080/user/list").then((response) => (this.users = response.data));
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 export default {
   data() {
     return {
@@ -41,7 +42,7 @@ export default {
       user: {
         email: "dimatest4@mail.ru",
         username: "dimatest4",
-        password: "test",
+        password: "",
         files: null,
       },
       userId: null,
@@ -54,7 +55,7 @@ export default {
   },
   created() {},
   methods: {
-    async mounted() {
+    async profile() {
       let formData = new FormData();
       formData.append("username", this.user.username);
       formData.append("password", this.user.password);
@@ -67,9 +68,13 @@ export default {
       ) {
         this.sucsess = "Заполните все поля";
       } else {
+        let token = localStorage.getItem("token");
+        if(localStorage.access_token) token = localStorage.getItem('access_token');
         axios
           .patch("http://localhost:8080/user/" + this.userId, formData, {
-            headers: { "Content-Type": "multipart/form-data" },
+            headers: { Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+            },
           })
           .then((response) => {
             this.result = response.status;
@@ -88,6 +93,29 @@ export default {
     handleFileUpload() {
       this.user.files = this.$refs.file.files[0];
     },
+  },
+  mounted() {
+    let token = localStorage.getItem("token")
+    if(localStorage.access_token) token = localStorage.getItem('access_token');
+    var decoded = jwt_decode(token);
+    this.userId = decoded.id;
+    axios
+      .get("http://localhost:8080/user/currentuser" ,{
+          headers: {
+            Authorization: `Bearer ${token}`,
+            },
+        })
+      .then((response) => {
+        this.userId = response.data.userId;
+        this.user.email = response.data.email
+        this.user.username = response.data.username
+        console.log('response:')
+        console.log(response.data);
+      })
+      .catch((e) => {
+        this.erors.push(e);
+        console.log(this.erors);
+      });
   },
 };
 </script>

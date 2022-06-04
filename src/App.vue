@@ -1,19 +1,20 @@
 
 <template>
-  <div>
-    <Header-app />
-    <router-view></router-view>
-  </div>
+  <Header-app />
+  <router-view></router-view>
+  <Footer-app />
 </template>
 
 <script>
 import HeaderApp from "@/components/HeaderApp";
+import FooterApp from "@/components/FooterApp";
 //import FormsTest from "@/components/FormsTest";
 //import CatalogItems from "@/components/CatalogItems";
 
 export default {
   components: {
     HeaderApp,
+    FooterApp,
   }
 };
 </script>

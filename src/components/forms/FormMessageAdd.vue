@@ -57,7 +57,7 @@ export default {
         let token = localStorage.getItem("token")
         if(localStorage.access_token) token = localStorage.getItem('access_token');
         axios
-          .post("http://localhost:8080/article", {
+          .patch("http://localhost:8080/article" + id, {
             title: this.article.title,
             text: this.article.text,
             filename: this.article.filename,
@@ -95,36 +95,5 @@ export default {
 </script>
 
 <style>
-  .new__admin {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .new__admin input,
-  .new__admin textarea {
-    margin-bottom: 30px;
-    margin-top: 10px;
-  }
-
-  .new__admin button {
-    background: #4741a7;
-    height: 40px;
-    border-radius: 10px;
-    width: 130px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    font-size: 14px;
-    margin-left: auto;
-    margin-right: auto;
-    color: #ffffff;
-    font-weight: 500;
-    font-family: "Roboto",
-      sans-serif;
-    transition: 0.3s all ease;
-    cursor: pointer;
-    border: 0px;
-  }
+  
 </style>
