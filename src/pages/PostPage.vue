@@ -17,20 +17,14 @@
       </span>
       <br>
       <span class="new__like__title">Оценка</span>
-      <div class="new__like">
-        <div class="new__like__item new__like__item__minus">
-          -
-        </div>
+      <div @click="addLike" class="new__like">
         <div class="new__like__item new__like__item__pluse active">
           +
         </div>
       </div>
       <div class="new__like__curr">
-        <div class="new__like__curr__item new__like__curr__minus">
-          - {{article.amountOfRate}}
-        </div>
         <div class="new__like__curr__item new__like__curr__pluse">
-          + {{article.rate}}
+          + {{article.amountOfLikes}}
         </div>
       </div>
       {{this.messages}}
@@ -90,8 +84,8 @@
           </div>
         </div> -->
         <article-message
-          v-for="value in messagesSort"
-          :key="value.id" :message="value" :author="nameUser"/>
+          v-for="value in messages"
+          :key="value.id" :message="value" :author="nameUser" :articleId="this.id" :role="this.role" :userName="userName"  @reloud="reloud"/>
       </div>
       <form action="" class="new__add__comment">
         <h3 class="new__add__comment__title">
@@ -124,6 +118,7 @@
         nameUser: '',
         articleCode: '',
         erors: [],
+        role: null,
         message: {
           parentCode: '',
           text: '',
@@ -135,6 +130,7 @@
         refresh_token: '',
         messages: '',
         messagesSort: [],
+        userName: null,
       }
     },
     methods: {
@@ -161,6 +157,69 @@
             this.sucsess = "Произошла ошибка";
           });
       },
+      async addLike() {
+        let token = localStorage.getItem("token");
+        if(localStorage.access_token) token = localStorage.getItem('access_token');
+        axios
+          .get("http://localhost:8080/article/" + this.id + "/like", {
+            headers: { Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            this.result = response.status;
+            console.log(response);
+            console.log(this.result);
+            this.sucsess = "Данные успешно обновленныы";
+            this.reloud();
+          })
+          .catch((error) => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+            this.status = error.response.status;
+            this.sucsess = "Произошла ошибка";
+          });
+      },
+      async reloud(){
+        console.log('created');
+        console.log('install-checkpos');
+        if(localStorage.refresh_token) this.refresh_token = localStorage.getItem('refresh_token');
+        if(localStorage.access_token) this.access_token = localStorage.getItem('access_token');
+        var decoded = jwt_decode(this.access_token);
+        console.log(decoded);
+        this.message.authorName = decoded.sub;
+        this.role = decoded.roles[0];
+        this.userName = decoded.sub
+        axios
+          .get("http://localhost:8080/article/" + this.id)
+          .then((response) => {
+            this.article = response.data;
+            this.article.creationDate = response.data.creationDate.split('T')[0];
+            this.article.creationDate = this.article.creationDate.replaceAll('-', '.');
+            this.nameUser = response.data.authorName;
+            this.articleCode = response.data.code;
+            console.log(response.data.creationDate.split('T')[0]);
+            console.log(response);
+          })
+          .catch((e) => {
+            this.erors.push(e);
+            console.log(e)
+          });
+        axios
+          .get("http://localhost:8080/article/" + this.id + "/comments", this.message)
+          .then((response) => {
+            this.messages = response.data.messageFamilyPojo
+            console.log('this.messages');
+            console.log(this.messages);
+            this.messagesSort = [];
+          
+            console.log('this.messagesSort');
+            console.log(this.messagesSort);
+          })
+          .catch((e) => {
+            this.erors.push(e);
+            console.log(e)
+          });
+      }
     },
     mounted() { 
       console.log('created');
@@ -170,6 +229,8 @@
       var decoded = jwt_decode(this.access_token);
       console.log(decoded);
       this.message.authorName = decoded.sub;
+      this.role = decoded.roles[0];
+      this.userName = decoded.sub
       axios
         .get("http://localhost:8080/article/" + this.id)
         .then((response) => {
@@ -188,14 +249,13 @@
         axios
           .get("http://localhost:8080/article/" + this.id + "/comments", this.message)
           .then((response) => {
-            this.messages = response.data.messageProfilePojo;
-            console.log(response);
+            this.messages = response.data.messageFamilyPojo
+            console.log('this.messages');
+            console.log(this.messages);
             this.messagesSort = [];
-            this.messages.forEach(element => {
-              if(element.parentCode == response.data.articleProfilePojo.code){
-                this.messagesSort.push(element);
-              }
-            });
+          
+            console.log('this.messagesSort');
+            console.log(this.messagesSort);
           })
           .catch((e) => {
             this.erors.push(e);
