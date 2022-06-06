@@ -5,7 +5,7 @@
         <li class="header__menu__item">
           <router-link to="/" class="header__menu__link">Главная</router-link>
         </li>
-        <li class="header__menu__item">
+        <li v-if="roles[0] == 'ADMIN'" class="header__menu__item">
           <router-link to="/post/add" class="header__menu__link">Добавить новость</router-link>
         </li>
       </nav>
@@ -37,6 +37,7 @@ export default {
       refresh_token: '',
       access_token: '',
       name: '',
+      roles: '',
     };
   },
   methods: {
@@ -53,9 +54,13 @@ export default {
     console.log('install-checkpos');
     if(localStorage.refresh_token) this.refresh_token = localStorage.getItem('refresh_token');
     if(localStorage.access_token) this.access_token = localStorage.getItem('access_token');
-    var decoded = jwt_decode(this.access_token);
-    console.log(decoded);
-    this.name = decoded.sub;
+    var decoded;
+    if(this.access_token){
+      decoded = jwt_decode(this.access_token);
+      console.log(decoded);
+      this.name = decoded.sub;
+      this.roles = decoded.roles;
+    }
     if(decoded){
       this.autorizen = true;
     }

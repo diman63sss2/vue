@@ -26,6 +26,7 @@
         </textarea>
         <input type="button" value="Отправить" @click="addMessage(this.message.message.code)" /> <br />
       </form>
+      {{result}}
     </div>
     <article-message
       v-for="value in child"
@@ -56,6 +57,7 @@
           authorName: this.userName,
           articleId: this.articleId,
         },
+        result: null,
       }
     },
     methods: {
@@ -81,13 +83,14 @@
             this.result = response.status;
             console.log(response);
             console.log(this.result);
-            this.sucsess = "Данные успешно обновленныы";
+            this.result = "Сообщение отправеленно";
+            this.messageRequest.text = '';
           })
           .catch((error) => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
             this.status = error.response.status;
-            this.sucsess = "Произошла ошибка";
+            this.result = "Произошла ошибка";
           });
       },
       async deleteMessage()
@@ -107,15 +110,17 @@
             this.result = response.status;
             console.log(response);
             console.log(this.result);
-            this.sucsess = "Данные успешно обновленныы";
+            this.result = "Сообщение удаленно";
+            this.openForm = false;
           })
           .catch((error) => {
             this.errorMessage = error.message;
             console.error("There was an error!", error);
             this.status = error.response.status;
-            this.sucsess = "Произошла ошибка";
+            this.result = "Произошла ошибка";
+            this.openForm = false;
           });
-      }
+      },
     },
   }
 </script>

@@ -1,12 +1,34 @@
 <template>
   <div class="new">
     <div class="container">
-      {{this.article}} <br>
-      {{this.erors}} <br>
-      <h1 class="catalog__title">
+      <input v-if="role ==='ADMIN'" type="button" value="Удалить" @click="deleteArticle" /> <br />
+      <form v-if="role ==='ADMIN'" class="new__admin" action="">
+        <input required name="id" type="hidden" value="3">
+        <label for="title">
+          Заголовок новости
+        </label>
+        <input required id="title" type="text" v-model="articleForm.title">
+        <label for="desc">
+          Контент новости
+        </label>
+        <textarea
+          id="desc"
+          name=""
+          cols="30"
+          rows="10"
+          v-model="articleForm.text">
+        </textarea>
+        <label for="img">
+          Ссылка на изображение
+        </label>
+        <input required id="img" type="text" v-model="articleForm.filename">
+        <input type="button" value="Изменить" @click="updateNew" /> <br />
+      </form>
+      {{this.sucsess}} <br>
+      <h1 v-if="role !=='ADMIN'" class="catalog__title">
         {{article.title}}
       </h1>
-      <div class="new__content">
+      <div v-if="role !=='ADMIN'" class="new__content">
         <img :src="article.filename" alt="new-1" class="new__img">
         <p>
           {{article.text}}
@@ -27,7 +49,6 @@
           + {{article.amountOfLikes}}
         </div>
       </div>
-      {{this.messages}}
       <div class="new__comments">
         <!-- <div class="new__comment__item">
           <div class="new__comment">
@@ -85,9 +106,9 @@
         </div> -->
         <article-message
           v-for="value in messages"
-          :key="value.id" :message="value" :author="nameUser" :articleId="this.id" :role="this.role" :userName="userName"  @reloud="reloud"/>
+          :key="value.id" :message="value" :author="nameUser" :articleId="this.id" :role="this.role" :userName="userName"  v-on:reloud="reloud" />
       </div>
-      <form action="" class="new__add__comment">
+      <form v-if="role != undefined" action="" class="new__add__comment">
         <h3 class="new__add__comment__title">
           Оставить комментарий
         </h3>
@@ -125,6 +146,12 @@
           authorName: '',
           articleId: this.$route.params.id,
         },
+        articleForm: {
+          title: "Заголовок новости",
+          text: "Контент новости",
+          filename: "https://static8.depositphotos.com/1008504/984/i/600/depositphotos_9843276-stock-photo-the-word-news.jpg",
+          tag: null,
+        },
         text: '',
         access_token: '',
         refresh_token: '',
@@ -149,6 +176,7 @@
             console.log(response);
             console.log(this.result);
             this.sucsess = "Данные успешно обновленныы";
+            this.reloud();
           })
           .catch((error) => {
             this.errorMessage = error.message;
@@ -184,11 +212,16 @@
         console.log('install-checkpos');
         if(localStorage.refresh_token) this.refresh_token = localStorage.getItem('refresh_token');
         if(localStorage.access_token) this.access_token = localStorage.getItem('access_token');
-        var decoded = jwt_decode(this.access_token);
-        console.log(decoded);
-        this.message.authorName = decoded.sub;
-        this.role = decoded.roles[0];
-        this.userName = decoded.sub
+        var decoded;
+        if(this.access_token){
+          decoded = jwt_decode(this.access_token);
+          console.log(decoded);
+          this.message.authorName = decoded.sub;
+          this.role = decoded.roles[0];
+          this.userName = decoded.sub
+        }
+         
+          
         axios
           .get("http://localhost:8080/article/" + this.id)
           .then((response) => {
@@ -219,6 +252,56 @@
             this.erors.push(e);
             console.log(e)
           });
+      },
+      async updateNew() {
+        if (this.articleForm.title == "" || this.articleForm.text == "") {
+        this.sucsess = "Заполните все поля";
+      } else {
+        let token = localStorage.getItem("token")
+        if(localStorage.access_token) token = localStorage.getItem('access_token');
+        axios
+          .patch("http://localhost:8080/article/" + this.id, {
+            title: this.articleForm.title,
+            text: this.articleForm.text,
+            filename: this.articleForm.filename,
+            tag: this.articleForm.tag,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          })
+          .then((response) => {
+            this.result = response.status;
+            console.log(response);
+            console.log(this.result);
+            this.sucsess = "обновленна";
+          })
+          .catch((error) => {
+            this.errorMessage = error.message;
+            console.error("There was an error!", error);
+            this.status = error.response.status;
+            this.sucsess = "Произошла ошибка";
+          });
+        }
+      },
+      async deleteArticle() {
+        let token = localStorage.getItem("token");
+        if(localStorage.access_token) token = localStorage.getItem('access_token');
+        axios
+          .delete("http://localhost:8080/article/"  + this.id,{
+            headers: {
+              Authorization: `Bearer ${token}`,
+            }
+          })
+          .then((response) => {
+            console.log(response);
+            console.log(this.users);
+            this.sucsess = 'Запись удаленна';
+          })
+          .catch((e) => {
+            this.erors.push(e);
+          });
       }
     },
     mounted() { 
@@ -226,15 +309,23 @@
       console.log('install-checkpos');
       if(localStorage.refresh_token) this.refresh_token = localStorage.getItem('refresh_token');
       if(localStorage.access_token) this.access_token = localStorage.getItem('access_token');
-      var decoded = jwt_decode(this.access_token);
-      console.log(decoded);
-      this.message.authorName = decoded.sub;
-      this.role = decoded.roles[0];
-      this.userName = decoded.sub
+      var decoded;
+      if(this.access_token){
+        decoded = jwt_decode(this.access_token);
+        console.log(decoded);
+        this.message.authorName = decoded.sub;
+        this.role = decoded.roles[0];
+        this.userName = decoded.sub
+      }
+        
       axios
         .get("http://localhost:8080/article/" + this.id)
         .then((response) => {
           this.article = response.data;
+          this.articleForm.title = this.article.title;
+          this.articleForm.text = this.article.text;
+          this.articleForm.filename = this.article.filename;
+          
           this.article.creationDate = response.data.creationDate.split('T')[0];
           this.article.creationDate = this.article.creationDate.replaceAll('-', '.');
           this.nameUser = response.data.authorName;

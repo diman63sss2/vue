@@ -18,8 +18,8 @@
     <label for="img">
       Ссылка на изображение
     </label>
-    <input required id="img" type="text" value="https://static8.depositphotos.com/1008504/984/i/600/depositphotos_9843276-stock-photo-the-word-news.jpg">
-    <input type="button" value="Изменить" @click="mounted" /> <br />
+    <input required id="img" type="text" v-model="article.filename">
+    <input type="button" value="Добавить новость" @click="mounted" /> <br />
   </form>
   {{this.result}} <br>
   {{}} <br>
@@ -37,8 +37,7 @@ export default {
       article: {
         title: "Заголовок новости",
         text: "Контент новости",
-        filename:
-          "https://static8.depositphotos.com/1008504/984/i/600/depositphotos_9843276-stock-photo-the-word-news.jpg",
+        filename: "https://static8.depositphotos.com/1008504/984/i/600/depositphotos_9843276-stock-photo-the-word-news.jpg",
         tag: null,
         authorId: "1",
       },
@@ -79,7 +78,6 @@ export default {
               text: null,
               filename: null,
               tag: null,
-              authorId: null,
             };
           })
           .catch((error) => {
